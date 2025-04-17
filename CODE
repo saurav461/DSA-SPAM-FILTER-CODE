@@ -1,0 +1,47 @@
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+
+#define MAX_EMAIL_LENGTH 1000
+#define SPAM_KEYWORDS 5
+const char *spam_keywords[SPAM_KEYWORDS] = {
+    "win",
+    "free",
+    "money",
+    "credit",
+    "offer"
+};
+
+void to_lowercase(char *str) {
+    for (; *str; ++str) {
+        *str = tolower(*str);
+    }
+}
+int is_spam(const char *email_text) {
+    char buffer[MAX_EMAIL_LENGTH];
+    strncpy(buffer, email_text, MAX_EMAIL_LENGTH);
+    buffer[MAX_EMAIL_LENGTH - 1] = '\0';
+
+    to_lowercase(buffer);
+
+    for (int i = 0; i < SPAM_KEYWORDS; i++) {
+        if (strstr(buffer, spam_keywords[i])) {
+            return 1; 
+        }
+    }
+    return 0;
+
+int main() {
+    char email_text[MAX_EMAIL_LENGTH];
+
+    printf("Enter the email content (max %d characters):\n", MAX_EMAIL_LENGTH - 1);
+    fgets(email_text, MAX_EMAIL_LENGTH, stdin);
+
+    if (is_spam(email_text)) {
+        printf("⚠️  This email is flagged as SPAM.\n");
+    } else {
+        printf("✅ This email is NOT spam.\n");
+    }
+
+    return 0;
+}
